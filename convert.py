@@ -12,9 +12,9 @@ for x in range(128):
         p = pix[y,x]
         mono = (p[0] + p[1] + p[2]) / 3
         if mono > 130:
-            mono = 1
-        else:
             mono = 0
+        else:
+            mono = 1
         new.putpixel((y,x), mono)
         
 
@@ -28,4 +28,14 @@ for x in range(128):
         dat[x+y*128] = p
 
 new.save("mono.bmp")
+print("Raw:")
 print(dat)
+
+print("Inflating:");
+
+dati = [0]*128*64
+for y in range(64):
+    for x in range(128):
+        v = new.getpixel((y,x))
+        dati[x+y*128] = v
+print(dati)

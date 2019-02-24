@@ -107,8 +107,8 @@ void dem_copy(const uint8_t *fb) {
         for( y = 0; y < 64; y++ ) {
             uint8_t val1 = 0, val2 = 0;
             for( b = 0; b < 8; b++ ) {
-                val1 |= fb[y + (x+b)*128] << b;
-                val2 |= fb[y + 64 + (x+b)*128] << b;
+                val1 |= fb[y + (x*8+b)*128] << b;
+                val2 |= fb[y + 64 + (x*8+b)*128] << b;
             }
             if( val1 == val2 ) {
                 dem_write(DEM_CS_BOTH, DEM_DR, val1);
