@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="65">
   <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="f1" displayName="common" projectFiles="true">
+      <logicalFolder name="src" displayName="src" projectFiles="true">
+        <itemPath>../../src/fifo.c</itemPath>
+        <itemPath>../../src/game.c</itemPath>
+        <itemPath>../../src/dem128064a.c</itemPath>
+        <itemPath>../../src/dem128064a.h</itemPath>
+        <itemPath>../../src/fifo.h</itemPath>
+        <itemPath>../../src/game.h</itemPath>
+        <itemPath>../../src/salma.h</itemPath>
+      </logicalFolder>
+    </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
@@ -31,9 +42,7 @@
         </logicalFolder>
         <itemPath>../src/app.h</itemPath>
         <itemPath>../src/uart.h</itemPath>
-        <itemPath>../src/fifo.h</itemPath>
         <itemPath>../src/ports.h</itemPath>
-        <itemPath>../src/salma.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="driver" projectFiles="true">
@@ -134,10 +143,7 @@
         <itemPath>../src/app.c</itemPath>
         <itemPath>../src/main.c</itemPath>
         <itemPath>../src/uart.c</itemPath>
-        <itemPath>../src/fifo.c</itemPath>
         <itemPath>../src/ports.c</itemPath>
-        <itemPath>../src/dem128064a.c</itemPath>
-        <itemPath>../src/dem128064a.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="system" projectFiles="true">
@@ -160,6 +166,7 @@
     <Elem>../../../../opt/microchip/harmony/v2_06</Elem>
     <Elem>../src/default</Elem>
     <Elem>../src/system_config/default</Elem>
+    <Elem>../../src</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -322,7 +329,7 @@
         <property key="use-indirect-calls" value="false"/>
       </C32CPP>
       <C32Global>
-        <property key="common-include-directories" value=""/>
+        <property key="common-include-directories" value="../../src"/>
         <property key="gp-relative-option" value=""/>
         <property key="legacy-libc" value="false"/>
         <property key="mdtcm" value=""/>
@@ -381,7 +388,6 @@
         <property key="UART6" value="true"/>
         <property key="USB" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
-        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

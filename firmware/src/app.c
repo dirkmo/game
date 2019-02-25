@@ -3,11 +3,10 @@
 #include "app.h"
 #include "uart.h"
 #include "dem128064a.h"
+#include "game.h"
 #include "salma.h"
 
-
 APP_DATA appData;
-
 
 char *trim(char *s) {
     char *w = s;
@@ -49,12 +48,10 @@ void APP_Tasks ( void )
         {
             bool appInitialized = true;
        
-        
+            game_init();        
+
             if (appInitialized)
             {
-                printf("Game machine started.\n");
-                dem_enable();
-                dem_copy_raw(pic);
                 appData.state = APP_STATE_SERVICE_TASKS;
             }
             break;
@@ -62,7 +59,7 @@ void APP_Tasks ( void )
 
         case APP_STATE_SERVICE_TASKS:
         {
-
+            game_loop();
             if( uart_received_str() ) {
                 char str[128];
                 uart_getstring(str, sizeof(str));
