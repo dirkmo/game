@@ -5,3 +5,5 @@ firmware/game.X/nbproject/Makefile-local-default.mk
 firmware/game.X/nbproject/Makefile-variables.mk
 firmware/game.X/nbproject/Package-default.bash
 firmware/game.X/nbproject/private/
+*.o
+game
