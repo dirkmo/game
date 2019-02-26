@@ -7,18 +7,20 @@
 #define SPACE 1
 
 typedef enum {
-    DEM_CMD_DISPLAY_OFF = 0x3E,
-    DEM_CMD_DISPLAY_ON  = 0x3F,
-    DEM_CMD_SETADDR_X   = 0xB8,
+    DEM_CMD_DISPLAY_OFF = 0x00,
+    DEM_CMD_DISPLAY_ON  = 0x01,
+    DEM_CMD_SETADDR_X   = 0x80,
     DEM_CMD_SETADDR_Y   = 0x40,
     DEM_CMD_SETADDR_Z   = 0xC0,
+
+    DEM_CMD_MASK        = 0xC0
 } DEM_CMD;
 
 typedef struct {
     uint8_t ram[64 * 8];
-    uint8_t x : 3; // page 0..7 (byte address)
-    uint8_t y : 6; // line (0..63), auto increment
-    uint8_t z : 6; // start line (0..63)
+    uint8_t x; // page 0..7 (byte address)
+    uint8_t y; // line (0..63), auto increment
+    uint8_t z; // start line (0..63)
     uint8_t reset;
     uint8_t on;
     uint8_t busy;
@@ -40,6 +42,7 @@ void sdl_setup(int _scale) {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
     win = SDL_CreateWindow("Game Machine", 200, 100, SX*scale + (SX+1)*SPACE, SY*scale + (SY+1)*SPACE, SDL_WINDOW_SHOWN);
     screen = SDL_GetWindowSurface(win);
+    memset(&disp1, 0, sizeof(display_t));
 }
 
 void sdl_close() {
@@ -63,6 +66,7 @@ static bool dem_get_pixel( uint8_t _y, uint8_t _x ) {
 #else
 
 static bool dem_get_pixel( uint8_t _y, uint8_t _x ) {
+    // sollte funzen
     // ---> y axis
     // |
     // v
@@ -84,14 +88,25 @@ static bool dem_get_pixel( uint8_t _y, uint8_t _x ) {
 #endif
 
 static void dem_cmd( display_t *disp, uint8_t cmd ) {
-    if( (cmd & DEM_CMD_DISPLAY_OFF) == DEM_CMD_DISPLAY_OFF) {
-        disp->on = cmd & 1;
-    } else if( (cmd & DEM_CMD_SETADDR_X) == DEM_CMD_SETADDR_X ) {
-        disp->x = cmd & 0x3F;
-    } else if( (cmd & DEM_CMD_SETADDR_Y) == DEM_CMD_SETADDR_Y ) {
-        disp->y = cmd & 0x07;
-    } else if( (cmd & DEM_CMD_SETADDR_Z) == DEM_CMD_SETADDR_Z ) {
-        disp->z = cmd & 0x3F;
+    uint8_t cmd_wo_val = cmd & DEM_CMD_MASK;
+    switch( cmd_wo_val ) {
+        case DEM_CMD_DISPLAY_OFF:
+            disp->on = cmd & 1;
+            printf("display %s\n", disp->on ? "on" : "off");
+            break;
+        case DEM_CMD_SETADDR_X:
+            disp->x = cmd & 0x07;
+            printf("setting x to %02X\n",disp->x);
+            break;
+        case DEM_CMD_SETADDR_Y:
+            disp->y = cmd & 0x3F;
+            printf("setting y to %02X\n",disp->y);
+            break;
+        case DEM_CMD_SETADDR_Z:
+            disp->z = cmd & 0x3F;
+            printf("setting z to %02X\n",disp->z);
+            break;
+        default: printf("unknown cmd %02X\n", cmd_wo_val);
     }
 }
 
@@ -103,7 +118,7 @@ static void dem_write( display_t *disp, uint8_t rs, uint8_t dat ) {
         // data
         uint8_t addr = disp->y + disp->x * 8;
         disp->ram[addr] = dat;
-        disp->y++;
+        disp->y = (disp->y + 1) & 0x3F;
         printf("disp%d %d,%d = %02X\n", (disp == &disp2) + 1, disp->y, disp->x, dat);
     }
 }
@@ -118,7 +133,7 @@ static void dem_read( display_t *disp, uint8_t rs, uint8_t *dat ) {
         uint8_t addr = disp->y + disp->x * 8;
         *dat = datalatch;
         datalatch = disp->ram[addr];
-        disp->y++;
+        disp->y = (disp->y + 1) & 0x3F;
     }
 }
 
@@ -127,7 +142,7 @@ void dem_bus( uint8_t rw, uint8_t rs, uint8_t e, uint8_t cs, uint8_t *dat ) {
     if( e_old != e ) {
         e_old = e;
         // enable pin rising edge
-        if( rw == 0 ) {
+        if( e && (rw == 0) ) {
             // write access
             if( cs & 1 ) {
                 dem_write( &disp1, rs, *dat );

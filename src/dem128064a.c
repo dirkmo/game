@@ -59,14 +59,17 @@ static void dem_read(dem_cs_t cs, dem_reg_t reg, uint8_t *val) {
 }
 
 void dem_set_x(dem_cs_t cs, uint8_t x) {
+    printf("Setting x = %02X\n", x&7);
     dem_write(cs, DEM_IR, DEM_SETADDR_X | (x & 7));
 }
 
 void dem_set_y(dem_cs_t cs, uint8_t y) {
+    printf("Setting y = %02X\n", y&63);
     dem_write(cs, DEM_IR, DEM_SETADDR_Y | (y & 63));
 }
 
 void dem_set_z(dem_cs_t cs, uint8_t z) {
+    printf("Setting z = %02X\n", z&63);
     dem_write(cs, DEM_IR, DEM_SETADDR_Z | (z & 63));
 }
 
