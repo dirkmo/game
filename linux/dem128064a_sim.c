@@ -1,4 +1,10 @@
 #include "dem128064a_sim.h"
+#include <SDL.h>
+#include <stdbool.h>
+
+#define SX 128
+#define SY 64
+#define SPACE 1
 
 typedef enum {
     DEM_CMD_DISPLAY_OFF = 0x3E,
@@ -9,7 +15,7 @@ typedef enum {
 } DEM_CMD;
 
 typedef struct {
-    uint8_t ram[64];
+    uint8_t ram[64 * 8];
     uint8_t x : 3; // page 0..7 (byte address)
     uint8_t y : 6; // line (0..63), auto increment
     uint8_t z : 6; // start line (0..63)
@@ -21,7 +27,61 @@ typedef struct {
 static display_t disp1;
 static display_t disp2;
 
+static SDL_Window *win;
+static SDL_Surface *screen;
+static int scale = 5;
+
+static bool dem_get_pixel( uint8_t y, uint8_t x );
+
 //------------------------------------------------------------------------------
+
+void sdl_setup(int _scale) {
+    scale = _scale;
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
+    win = SDL_CreateWindow("Game Machine", 200, 100, SX*scale + (SX+1)*SPACE, SY*scale + (SY+1)*SPACE, SDL_WINDOW_SHOWN);
+    screen = SDL_GetWindowSurface(win);
+}
+
+void sdl_close() {
+    SDL_DestroyWindow(win);
+    SDL_Quit();
+}
+
+//------------------------------------------------------------------------------
+
+#if 0
+static bool dem_get_pixel( uint8_t _y, uint8_t _x ) {
+    uint8_t y = _y;
+    uint8_t x = _x / 8;
+    uint8_t bit = _x % 8;
+
+    int addr = x*128 + y;
+    extern uint8_t pic_raw[];
+    return (pic_raw[addr] >> bit) & 1;
+}
+
+#else
+
+static bool dem_get_pixel( uint8_t _y, uint8_t _x ) {
+    // ---> y axis
+    // |
+    // v
+    // x axis
+    display_t *d;
+    uint8_t y;
+    uint8_t x = _x / 8;
+    uint8_t bit = _x % 8;
+    if( _y < 64 ) {
+        d = &disp1;
+        y = _y;
+    } else {
+        d = &disp2;
+        y = _y - 64;
+    }
+    uint16_t addr = x*64 + y;
+    return (d->ram[addr] >> bit) & 1;
+}
+#endif
 
 static void dem_cmd( display_t *disp, uint8_t cmd ) {
     if( (cmd & DEM_CMD_DISPLAY_OFF) == DEM_CMD_DISPLAY_OFF) {
@@ -44,6 +104,7 @@ static void dem_write( display_t *disp, uint8_t rs, uint8_t dat ) {
         uint8_t addr = disp->y + disp->x * 8;
         disp->ram[addr] = dat;
         disp->y++;
+        printf("disp%d %d,%d = %02X\n", (disp == &disp2) + 1, disp->y, disp->x, dat);
     }
 }
 
@@ -84,4 +145,19 @@ void dem_bus( uint8_t rw, uint8_t rs, uint8_t e, uint8_t cs, uint8_t *dat ) {
             dem_read( &disp2, rs, dat);
         }
     }
+}
+
+void dem_update_screen( void ) {
+    // funzt
+    const uint32_t darkgreen = SDL_MapRGB(screen->format, 0, 50, 0);
+    const uint32_t green = SDL_MapRGB(screen->format, 0, 230, 0);
+    const uint32_t black = SDL_MapRGB(screen->format, 0, 0, 0);
+    SDL_FillRect( screen, NULL, green );
+    for( int x = 0; x < 128; x++ ) {
+        for( int y = 0; y < 64; y++ ) {
+            SDL_Rect rect = { .x = x*scale + (x+1)*SPACE, .y = y*scale + (y+1)*SPACE, .w = scale, .h = scale };
+            SDL_FillRect( screen, &rect, dem_get_pixel(x, y) ? black : green );
+        }
+    }
+    SDL_UpdateWindowSurface(win);
 }
