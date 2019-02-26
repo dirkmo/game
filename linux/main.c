@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
     sdl_setup(scale);
     
     game_init();
+    dem_print();
     while(1) {
         game_loop();
         dem_update_screen();

@@ -42,7 +42,6 @@ void sdl_setup(int _scale) {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
     win = SDL_CreateWindow("Game Machine", 200, 100, SX*scale + (SX+1)*SPACE, SY*scale + (SY+1)*SPACE, SDL_WINDOW_SHOWN);
     screen = SDL_GetWindowSurface(win);
-    memset(&disp1, 0, sizeof(display_t));
 }
 
 void sdl_close() {
@@ -66,22 +65,14 @@ static bool dem_get_pixel( uint8_t _y, uint8_t _x ) {
 #else
 
 static bool dem_get_pixel( uint8_t _y, uint8_t _x ) {
-    // sollte funzen
     // ---> y axis
     // |
     // v
     // x axis
-    display_t *d;
-    uint8_t y;
+    display_t *d = _y < 64 ? &disp1 : &disp2;
+    uint8_t y = _y % 64;
     uint8_t x = _x / 8;
     uint8_t bit = _x % 8;
-    if( _y < 64 ) {
-        d = &disp1;
-        y = _y;
-    } else {
-        d = &disp2;
-        y = _y - 64;
-    }
     uint16_t addr = x*64 + y;
     return (d->ram[addr] >> bit) & 1;
 }
@@ -116,10 +107,10 @@ static void dem_write( display_t *disp, uint8_t rs, uint8_t dat ) {
         dem_cmd( disp, dat );
     } else {
         // data
-        uint8_t addr = disp->y + disp->x * 8;
+        uint16_t addr = disp->y + disp->x * 64;
+        printf("disp%d->ram[%d] = %02X\n", (disp == &disp2) + 1, addr, dat);
         disp->ram[addr] = dat;
-        disp->y = (disp->y + 1) & 0x3F;
-        printf("disp%d %d,%d = %02X\n", (disp == &disp2) + 1, disp->y, disp->x, dat);
+        disp->y = (disp->y + 1) % 64;
     }
 }
 
@@ -130,10 +121,10 @@ static void dem_read( display_t *disp, uint8_t rs, uint8_t *dat ) {
     } else {
         // read ram data, need a dummy read for accessing
         static uint8_t datalatch = 0;
-        uint8_t addr = disp->y + disp->x * 8;
+        uint16_t addr = disp->y + disp->x * 64;
         *dat = datalatch;
         datalatch = disp->ram[addr];
-        disp->y = (disp->y + 1) & 0x3F;
+        disp->y = (disp->y + 1) % 64;
     }
 }
 
