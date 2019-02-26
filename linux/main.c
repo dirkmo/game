@@ -4,12 +4,11 @@
 #include "dem128064a_sim.h"
 #include "game.h"
 
-#define TIMER_MS 50
-
 static SDL_TimerID timer;
 static int scale = 7;
 
 static uint32_t timer_callback( uint32_t interval, void *param) {
+    game_timer_callback();
     return interval;
 }
 
@@ -30,12 +29,11 @@ void parseParameters(int argc, char *argv[]) {
 int main(int argc, char *argv[]) {
     parseParameters(argc, argv);
 
-    timer = SDL_AddTimer( TIMER_MS, timer_callback, NULL );
+    timer = SDL_AddTimer( GAME_TIMER_MS, timer_callback, NULL );
 
     sdl_setup(scale);
     
     game_init();
-    dem_print();
     while(1) {
         game_loop();
         dem_update_screen();

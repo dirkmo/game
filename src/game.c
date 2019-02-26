@@ -7,7 +7,11 @@
 void game_init(void) {
     printf("Game machine started.\n");
     dem_enable();
-    dem_copy_raw(pic_raw);
+    dem_copy_raw(pic_raw_salma);
+}
+
+void game_timer_callback(void) {
+    
 }
 
 void game_loop(void) {

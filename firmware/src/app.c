@@ -71,9 +71,9 @@ void APP_Tasks ( void )
                 } else if( sscanf(s, "fill %d", &val) == 1 ) {
                     dem_fill(val);
                 } else if( strcmp(s, "raw") == 0 ) {
-                    dem_copy_raw(pic_raw);
+                    dem_copy_raw(pic_raw_salma);
                 } else if( strcmp(s, "pic") == 0 ) {
-                    dem_copy(pic);
+                    dem_copy(pic_salma);
                 } else if( strcmp(s, "enable") == 0 ) {
                     dem_enable();
                 } else if( strcmp(s, "disable") == 0 ) {

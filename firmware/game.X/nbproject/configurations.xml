@@ -10,6 +10,7 @@
         <itemPath>../../src/fifo.h</itemPath>
         <itemPath>../../src/game.h</itemPath>
         <itemPath>../../src/salma.h</itemPath>
+        <itemPath>../../src/salma.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="HeaderFiles"
