@@ -18,7 +18,7 @@ typedef enum {
 
 void game_init(void);
 void game_timer_callback(void);
-void game_button_callback(uint32_t buttons);
+void game_button_callback(uint32_t _buttons);
 void game_loop(void);
 
 #endif	/* GAME_H */

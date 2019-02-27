@@ -83,19 +83,15 @@ static void dem_cmd( display_t *disp, uint8_t cmd ) {
     switch( cmd_wo_val ) {
         case DEM_CMD_DISPLAY_OFF:
             disp->on = cmd & 1;
-            printf("display %s\n", disp->on ? "on" : "off");
             break;
         case DEM_CMD_SETADDR_X:
             disp->x = cmd & 0x07;
-            printf("setting x to %02X\n",disp->x);
             break;
         case DEM_CMD_SETADDR_Y:
             disp->y = cmd & 0x3F;
-            printf("setting y to %02X\n",disp->y);
             break;
         case DEM_CMD_SETADDR_Z:
             disp->z = cmd & 0x3F;
-            printf("setting z to %02X\n",disp->z);
             break;
         default: printf("unknown cmd %02X\n", cmd_wo_val);
     }
@@ -108,7 +104,6 @@ static void dem_write( display_t *disp, uint8_t rs, uint8_t dat ) {
     } else {
         // data
         uint16_t addr = disp->y + disp->x * 64;
-        printf("disp%d->ram[%d] = %02X\n", (disp == &disp2) + 1, addr, dat);
         disp->ram[addr] = dat;
         disp->y = (disp->y + 1) % 64;
     }
