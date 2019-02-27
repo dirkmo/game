@@ -89,6 +89,12 @@ void __ISR(_UART_1_VECTOR, ipl1AUTO) _IntHandlerDrvUsartInstance0(void)
  
  
  
-/*******************************************************************************
+
+void __ISR(_TIMER_1_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance0(void)
+{
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_1);
+    DRV_TMR0_Tasks();
+}
+ /*******************************************************************************
  End of File
 */

@@ -14,6 +14,10 @@ void game_timer_callback(void) {
     
 }
 
+void game_button_callback(uint32_t buttons) {
+    
+}
+
 void game_loop(void) {
     
 }

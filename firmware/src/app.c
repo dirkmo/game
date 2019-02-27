@@ -29,12 +29,16 @@ void delay(int val) {
         _nop();
     }
 }
+void timer_callback(uintptr_t context, uint32_t alarmCount) {
+    game_timer_callback();
+}
 
 void APP_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
     appData.state = APP_STATE_INIT;
     uart_init();
+        
 }
 
 void APP_Tasks ( void )
@@ -48,6 +52,21 @@ void APP_Tasks ( void )
         {
             bool appInitialized = true;
        
+            
+            if( DRV_TMR_AlarmRegister(
+                DRV_TMR_INDEX_0, // DRV_HANDLE handle,
+                3125, // uint32_t divider
+                true, // bool isPeriodic
+                NULL, // uintptr_t context
+                timer_callback
+            ) ) {
+                printf("Timer registered.\n");
+            } else {
+                printf("ERROR: Timer could not be registered.\n");
+            }
+            DRV_TMR_Start(DRV_TMR_INDEX_0);
+            DRV_TMR_AlarmEnable(DRV_TMR_INDEX_0, true);
+            
             game_init();        
 
             if (appInitialized)

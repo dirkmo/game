@@ -21,7 +21,10 @@
           <logicalFolder name="f1" displayName="default" projectFiles="true">
             <logicalFolder name="f1" displayName="framework" projectFiles="true">
               <logicalFolder name="f1" displayName="driver" projectFiles="true">
-                <logicalFolder name="f1" displayName="usart" projectFiles="true">
+                <logicalFolder name="f1" displayName="tmr" projectFiles="true">
+                  <itemPath>../src/system_config/default/framework/driver/tmr/drv_tmr_static.h</itemPath>
+                </logicalFolder>
+                <logicalFolder name="f2" displayName="usart" projectFiles="true">
                   <logicalFolder name="f1" displayName="src" projectFiles="true">
                     <itemPath>../src/system_config/default/framework/driver/usart/src/drv_usart_static_local.h</itemPath>
                   </logicalFolder>
@@ -47,7 +50,16 @@
       </logicalFolder>
       <logicalFolder name="f1" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="driver" projectFiles="true">
-          <logicalFolder name="f1" displayName="usart" projectFiles="true">
+          <logicalFolder name="f1" displayName="tmr" projectFiles="true">
+            <logicalFolder name="f1" displayName="src" projectFiles="true">
+              <itemPath>../../../../../../opt/microchip/harmony/v2_06/framework/driver/tmr/src/drv_tmr_variant_mapping.h</itemPath>
+            </logicalFolder>
+            <itemPath>../../../../../../opt/microchip/harmony/v2_06/framework/driver/tmr/drv_tmr.h</itemPath>
+            <itemPath>../../../../../../opt/microchip/harmony/v2_06/framework/driver/tmr/drv_tmr_mapping.h</itemPath>
+            <itemPath>../../../../../../opt/microchip/harmony/v2_06/framework/driver/tmr/drv_tmr_compatibility.h</itemPath>
+            <itemPath>../../../../../../opt/microchip/harmony/v2_06/framework/driver/tmr/tmr_definitions_pic32m.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f2" displayName="usart" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../../../opt/microchip/harmony/v2_06/framework/driver/usart/src/drv_usart_variant_mapping.h</itemPath>
             </logicalFolder>
@@ -108,7 +120,13 @@
           <logicalFolder name="f1" displayName="default" projectFiles="true">
             <logicalFolder name="f1" displayName="framework" projectFiles="true">
               <logicalFolder name="f1" displayName="driver" projectFiles="true">
-                <logicalFolder name="f1" displayName="usart" projectFiles="true">
+                <logicalFolder name="f1" displayName="tmr" projectFiles="true">
+                  <logicalFolder name="f1" displayName="src" projectFiles="true">
+                    <itemPath>../src/system_config/default/framework/driver/tmr/src/drv_tmr_static.c</itemPath>
+                    <itemPath>../src/system_config/default/framework/driver/tmr/src/drv_tmr_mapping.c</itemPath>
+                  </logicalFolder>
+                </logicalFolder>
+                <logicalFolder name="f2" displayName="usart" projectFiles="true">
                   <logicalFolder name="f1" displayName="src" projectFiles="true">
                     <itemPath>../src/system_config/default/framework/driver/usart/src/drv_usart_mapping.c</itemPath>
                     <itemPath>../src/system_config/default/framework/driver/usart/src/drv_usart_static.c</itemPath>
@@ -389,6 +407,7 @@
         <property key="UART6" value="true"/>
         <property key="USB" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>
