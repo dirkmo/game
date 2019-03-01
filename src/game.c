@@ -12,8 +12,8 @@ void game_init(void) {
     printf("Game machine started.\n");
     dem_enable();
     //dem_copy_raw(pic_raw_salma);
-
-    font_puts_raw( font_6x8, "Dirk Moeller", fbuf, 0 );
+    memset(fbuf, 0xFF, 128*8);
+    font_puts_raw( font_6x8, "Dirk Moeller", fbuf, 1);
 
     dem_copy_raw(fbuf);
 }
