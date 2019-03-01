@@ -4,6 +4,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+// x=[0,127], y=[0,63]
+#define PUTPIXEL(ptr,x,y,val) if(val) { \
+        ptr[x + y/8] |= 1 << (y%8);     \
+    } eles {                            \
+        ptr[x + y/8] &= ~(1 << (y%8));  \
+    }
+
 typedef enum {
     DEM_CS_NONE = 0,
     DEM_CS1     = 1,
