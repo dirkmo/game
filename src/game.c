@@ -1,10 +1,12 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "game.h"
 #include "dem128064a.h"
 #include "salma.h"
 #include "font.h"
 #include "font_6x8.h"
+#include "sprite.h"
 
 static uint8_t fbuf[128*8];
 

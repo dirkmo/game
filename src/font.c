@@ -7,6 +7,7 @@ void font_put_raw(const uint8_t *font, char c, uint8_t *pos_raw, uint8_t bitoffs
     for( int i = 0; i < 6; i++ ) {
         pos_raw[i] &= ~upper_mask;
         pos_raw[i] |= f[i] << bitoffset;
+        // FIXME: potenziell out of bounds!
         pos_raw[i+128] &= ~lower_mask;
         pos_raw[i+128] |= f[i] >> (8-bitoffset);
     }

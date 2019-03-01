@@ -4,7 +4,7 @@ CFLAGS=-Wall -g -D__LINUX
 INC=-I../src -I. -I/usr/include/SDL2
 LDFLAGS=-lSDL2
 
-SRCS=../src/dem128064a.c ../src/fifo.c ../src/game.c ../src/salma.c ../src/font_6x8.c ../src/font.c
+SRCS=../src/dem128064a.c ../src/fifo.c ../src/game.c ../src/salma.c ../src/font_6x8.c ../src/font.c ../src/sprite.c
 SRCS+=main.c ports.c dem128064a_sim.c
 OBJS=$(SRCS:.c=.o)
 

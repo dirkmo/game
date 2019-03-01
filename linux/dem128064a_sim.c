@@ -149,8 +149,7 @@ void dem_bus( uint8_t rw, uint8_t rs, uint8_t e, uint8_t cs, uint8_t *dat ) {
 }
 
 void dem_update_screen( void ) {
-    // funzt
-    const uint32_t darkgreen = SDL_MapRGB(screen->format, 0, 50, 0);
+    // const uint32_t darkgreen = SDL_MapRGB(screen->format, 0, 50, 0);
     const uint32_t green = SDL_MapRGB(screen->format, 0, 230, 0);
     const uint32_t black = SDL_MapRGB(screen->format, 0, 0, 0);
     SDL_FillRect( screen, NULL, green );
