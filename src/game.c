@@ -10,12 +10,23 @@
 
 static uint8_t fbuf[128*8];
 
+uint8_t spritedata[] = {
+    0xf, 0xe, 0x7, 0xf
+};
+
+sprite_t sprite = {
+    .data = spritedata,
+    .w = 4, .h = 4,
+    .num = 1
+};
+
 void game_init(void) {
     printf("Game machine started.\n");
     dem_enable();
     //dem_copy_raw(pic_raw_salma);
-    memset(fbuf, 0xFF, 128*8);
-    font_puts_raw( font_6x8, "Dirk Moeller", fbuf, 1);
+
+    memset(fbuf, 0xFF, sizeof(fbuf));    
+    blit( &sprite, 0, fbuf, 0, 6 );
 
     dem_copy_raw(fbuf);
 }
