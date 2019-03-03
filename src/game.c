@@ -6,18 +6,25 @@
 #include "salma.h"
 #include "font.h"
 #include "font_6x8.h"
-#include "sprite.h"
+#include "canvas.h"
 
 static uint8_t fbuf[128*8];
 
-uint8_t spritedata[] = {
-    0xf, 0xe, 0x7, 0xf
+canvas_t screen = {
+    .w = 128,
+    .h = 64,
+    .data = fbuf
 };
 
-sprite_t sprite = {
-    .data = spritedata,
-    .w = 4, .h = 4,
-    .num = 1
+uint8_t spritedata[] = {
+    0x01, 0x00, 0x00, 0x01,
+    0x00, 0x00, 0x00, 0x00,
+    0x80, 0x00, 0x00, 0x80,
+};
+
+canvas_t sprite = {
+    .w = 4, .h = 24,
+    .data = spritedata
 };
 
 void game_init(void) {
@@ -25,10 +32,13 @@ void game_init(void) {
     dem_enable();
     //dem_copy_raw(pic_raw_salma);
 
-    memset(fbuf, 0xFF, sizeof(fbuf));    
-    blit( &sprite, 0, fbuf, 0, 6 );
+    memset(screen.data, 0xFF, canvas_bytesize(&screen));
+    for( int i = 0; i < screen.h/8; i++ ) {
+        screen.data[i*screen.w] = 0xfe;
+    }
+    canvas_blit( &sprite, &screen, 2, 1);
 
-    dem_copy_raw(fbuf);
+    dem_copy_raw(screen.data);
 }
 
 void game_timer_callback(void) {
