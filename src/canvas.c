@@ -29,7 +29,7 @@ static void blitbyte( uint8_t byte, uint8_t len, canvas_t *dst, uint32_t x, uint
         uint32_t d2_addr = x + (y/8+1) * dst->w;
         uint8_t *d2 = &dst->data[d2_addr];
         int d2_count = len - d1_count;
-        uint8_t d2_mask = 0xFFu >> dst_h_off;
+        uint8_t d2_mask = 0xFFu >> (8-d2_count);
         *d2 &= ~d2_mask;
         *d2 |= byte >> d1_count;
     }

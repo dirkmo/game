@@ -22,9 +22,20 @@ uint8_t spritedata[] = {
     0xff, 0x80, 0x80, 0xff,
 };
 
+uint8_t spritedata_inv[] = {
+    0x00, 0xfe, 0xfe, 0x00,
+    0x00, 0xff, 0xff, 0x00,
+    0x00, 0x7f, 0x7f, 0x00,
+};
+
 canvas_t sprite = {
     .w = 4, .h = 24,
     .data = spritedata
+};
+
+canvas_t sprite_inv = {
+    .w = 4, .h = 24,
+    .data = spritedata_inv
 };
 
 canvas_t salma = {
@@ -37,12 +48,13 @@ void game_init(void) {
     dem_enable();
     //dem_copy_raw(pic_raw_salma);
 
-    memset(screen.data, 0xff, canvas_bytesize(&screen));
+    memset(screen.data, 0x00, canvas_bytesize(&screen));
     for( int i = 0; i < screen.h/8; i++ ) {
         screen.data[i*screen.w] = 1;//0xfe;
     }
     //canvas_blit( &salma, &screen, 0, 0);
     canvas_blit( &sprite, &screen, 2, 2);
+    canvas_blit( &sprite_inv, &screen, 10, 2);
 
     dem_copy_raw(screen.data);
 }
