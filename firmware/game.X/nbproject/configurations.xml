@@ -11,6 +11,14 @@
         <itemPath>../../src/game.h</itemPath>
         <itemPath>../../src/salma.h</itemPath>
         <itemPath>../../src/salma.c</itemPath>
+        <itemPath>../../src/blocks.c</itemPath>
+        <itemPath>../../src/blocks.h</itemPath>
+        <itemPath>../../src/canvas.c</itemPath>
+        <itemPath>../../src/canvas.h</itemPath>
+        <itemPath>../../src/font.c</itemPath>
+        <itemPath>../../src/font.h</itemPath>
+        <itemPath>../../src/font_6x8.c</itemPath>
+        <itemPath>../../src/font_6x8.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="HeaderFiles"
@@ -407,7 +415,6 @@
         <property key="UART6" value="true"/>
         <property key="USB" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
-        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

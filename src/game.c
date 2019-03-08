@@ -22,15 +22,16 @@ canvas_t screen = {
 void game_init(void) {
     printf("Game machine started.\n");
     dem_enable();
-    //dem_copy_raw(pic_raw_salma);
 
-    //memset(screen.data, 0x00, canvas_bytesize(&screen));
-    //for( int i = 0; i < screen.h/8; i++ ) {
-    //    screen.data[i*screen.w] = 1;//0xfe;
-    //}
-    canvas_blit( &blocks[0], &screen, 2, 2);
-    canvas_hline( &screen, 10, 100, 60, true );
-    canvas_vline( &screen, 64, 0, 63, true );
+    memset(screen.data, 0x00, canvas_bytesize(&screen));
+    int i;
+    for( i = 0; i < screen.h/8; i++ ) {
+        //screen.data[i*screen.w] = 1;//0xfe;
+        canvas_putpixel(&screen, 0, i*8, true);
+    }
+    //canvas_blit( &blocks[0], &screen, 2, 2);
+    canvas_hline( &screen, 3, 126, 63, true );
+    canvas_vline( &screen, 2, 60, 63, true );
     dem_copy_raw(screen.data);
 }
 

@@ -2,7 +2,8 @@
 #include <stdio.h>
 
 void printbits(uint8_t val) {
-    for( int i = 7; i>=0; i-- ) {
+    int i;
+    for( i = 7; i>=0; i-- ) {
         printf("%d", (val>>i)&1);
     }
     printf("\n");
@@ -36,8 +37,9 @@ static void blitbyte( uint8_t byte, uint8_t len, canvas_t *dst, uint32_t x, uint
 }
 
 void canvas_blit( const canvas_t *src, canvas_t *dst, uint32_t x, uint32_t y ) {
-    for( int srcy = 0; srcy < src->h; srcy+=8 ) {
-        for( int i = 0; i < src->w; i++ ) {
+    int srcy, i;
+    for( srcy = 0; srcy < src->h; srcy+=8 ) {
+        for( i = 0; i < src->w; i++ ) {
             int len = src->h - srcy;
             if( len > 8 ) {
                 len = 8;
@@ -65,7 +67,8 @@ void canvas_hline( canvas_t *dst, uint32_t x1, uint32_t x2, uint32_t y, bool val
         x2 = t;
     }
     if( y < dst->h ) {
-        for( uint32_t x = x1; x <= x2; x++ ) {
+        uint32_t x;
+        for( x = x1; x <= x2; x++ ) {
             const int addr = x + dsty*dst->w;
             if ( val ) {
                 dst->data[addr] |= mask;
@@ -86,21 +89,22 @@ void canvas_vline( canvas_t *dst, uint32_t x, uint32_t y1, uint32_t y2, bool val
         uint32_t dsty1 = y1 / 8;
         uint32_t dsty2 = y2 / 8;
         int mask1 = 0xFFu << (y1 % 8);
-        int mask2 = 0xFFu >> (8 - (y2 % 8));
+        int mask2 = 0xFFu >> (7 - (y2 % 8));
 
-        for( uint32_t y = dsty1; y <= dsty2; y++ ) {
+        uint32_t y;
+        for( y = dsty1; y <= dsty2; y++ ) {
             int mask = 0xFF;
             if( y == dsty1 ) {
                 mask = mask1;
             }
             if( y == dsty2 ) {
-                mask = mask1 & mask2;
+                mask = mask & mask2;
             }
             if( val ) {
                 dst->data[x + y * dst->w] |= mask;
             } else {
                 dst->data[x + y * dst->w] &= ~mask;
-            }   
+            }
         }
     }
 }
