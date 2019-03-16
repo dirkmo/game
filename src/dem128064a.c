@@ -121,6 +121,7 @@ void dem_copy(const uint8_t *fb) {
 }
 
 void dem_enable(void) {
+    port_set_ctrl(DEM_PIN_RSTB, 1);
     while(dem_is_busy());
     dem_write(DEM_CS_BOTH, DEM_IR, DEM_DISPLAY_ON );
     while(dem_is_busy());

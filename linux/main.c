@@ -6,7 +6,7 @@
 #include "game.h"
 
 static SDL_TimerID timer;
-static int scale = 7;
+static int scale = 6;
 
 static uint32_t timer_callback( uint32_t interval, void *param) {
     game_timer_callback();

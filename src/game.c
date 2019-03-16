@@ -17,8 +17,6 @@ canvas_t screen = {
     .data = fbuf
 };
 
-
-
 void game_init(void) {
     printf("Game machine started.\n");
     dem_enable();
@@ -26,12 +24,16 @@ void game_init(void) {
     memset(screen.data, 0x00, canvas_bytesize(&screen));
     int i;
     for( i = 0; i < screen.h/8; i++ ) {
-        //screen.data[i*screen.w] = 1;//0xfe;
         canvas_putpixel(&screen, 0, i*8, true);
     }
-    //canvas_blit( &blocks[0], &screen, 2, 2);
-    canvas_hline( &screen, 3, 126, 63, true );
-    canvas_vline( &screen, 2, 60, 63, true );
+
+    // for( i = 0; i < 4; i++ ) {
+    //     canvas_vline(&screen, 41+i, 0, 63, true );
+    //     canvas_vline(&screen, 41+4 + 12*3 + 4-i, 0, 63, true );
+    // }
+
+    brick_draw(0, 0, &screen, 0, 0);
+
     dem_copy_raw(screen.data);
 }
 
