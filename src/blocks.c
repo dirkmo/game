@@ -70,9 +70,9 @@ void brick_draw(uint8_t shape, uint8_t rotation, canvas_t *cv, uint8_t fx, uint8
     for( y = 0; y < 4; y++ ) {
         for( x = 0; x < 4; x++ ) {
             if( shape_rotated[x+y*4]) {
-                canvas_blit(&block_filled, cv, (fx + x) * 4, (fy + y) * 4);
+                canvas_blit(&block_filled, cv, (fx + x) * block_filled.w, (fy + y) * block_filled.h);
             } else {
-                canvas_blit(&nothing, cv, (fx + x) * 4, (fy + y) * 4);
+                canvas_blit(&nothing, cv, (fx + x) * block_filled.w, (fy + y) * block_filled.h);
             }
         }
     }

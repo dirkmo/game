@@ -8,14 +8,24 @@
 #include "font_6x8.h"
 #include "canvas.h"
 #include "blocks.h"
+#include "buttons.h"
 
 static uint8_t fbuf[128*8];
+static uint8_t bgbuf[128*8];
 
-canvas_t screen = {
+static canvas_t screen = {
     .w = 128,
     .h = 64,
     .data = fbuf
 };
+
+static canvas_t background = {
+    .w = 128,
+    .h = 64,
+    .data = bgbuf
+};
+
+static uint8_t s_rotation;
 
 void game_init(void) {
     printf("Game machine started.\n");
@@ -41,14 +51,9 @@ void game_timer_callback(void) {
     
 }
 
-void game_button_callback(uint32_t _buttons) {
-    static uint32_t buttons = 0;
-    if( buttons != _buttons ) {
-        buttons = _buttons;
-
+void game_loop(void) {
+    if( button_pressed(BUTTON_ACTION0) ) {
+        s_rotation = (s_rotation + 1) % 4;
     }
 }
 
-void game_loop(void) {
-    
-}

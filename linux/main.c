@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include "dem128064a_sim.h"
 #include "game.h"
+#include "buttons.h"
 
 static SDL_TimerID timer;
 static int scale = 6;
@@ -47,7 +48,7 @@ void handle_keyboard(SDL_Event *event) {
     } else {
         buttons &= ~mask;
     }
-    game_button_callback(buttons);
+    buttons_callback(buttons);
 }
 
 int main(int argc, char *argv[]) {
