@@ -7,8 +7,10 @@ static uint32_t s_buttons_released;
 
 
 void buttons_callback(uint32_t _buttons) {
-    if( buttons != _buttons ) {
-        s_buttons_pressed |= s_buttons & 1 
+    if( s_buttons != _buttons ) {
+        uint32_t change = s_buttons ^ _buttons;
+        s_buttons_pressed |= s_buttons & change;
+	s_buttons_released |= ~s_buttons & change;
         s_buttons = _buttons;
     }
 }
@@ -24,4 +26,3 @@ bool button_is_down(buttons_t button) {
 
 bool button_up(buttons_t button) {
 }
-
