@@ -10,6 +10,15 @@
 #include "blocks.h"
 #include "buttons.h"
 
+#define FIELD_W 12
+#define FIELD_H (64 / 3)
+// left border
+#define FIELD_L (128/3 - FIELD_W/2)
+// right border
+#define FIELD_R (128/3 + FIELD_W/2)
+
+static uint32_t s_tick;
+
 static uint8_t fbuf[128*8];
 static uint8_t bgbuf[128*8];
 
@@ -25,24 +34,29 @@ static canvas_t background = {
     .data = bgbuf
 };
 
-static struct {
+static uint8_t field[FIELD_W*FIELD_H];
+
+static struct brick_t {
+    uint8_t rotation;
+    uint8_t shape;
     int x;
     int y;
-} pos = { .x = 5, .y = 2 };
+} brick;
 
-static uint8_t s_rotation;
-static uint8_t s_shape;
+void background_from_field(void) {
+    
+}
 
 bool collision( int x, int y ) {
     return false;
 }
 
 void move(int _x, int _y) {
-    int x = pos.x + _x;
-    int y = pos.y + _y;
+    int x = brick.x + _x;
+    int y = brick.y + _y;
     if( !collision(x, y) ) {
-        pos.x = x;
-        pos.y = y;
+        brick.x = x;
+        brick.y = y;
     }
 }
 
@@ -61,25 +75,28 @@ void game_init(void) {
     //     canvas_vline(&screen, 41+4 + 12*3 + 4-i, 0, 63, true );
     // }
 
-    brick_draw(s_shape, s_rotation, &screen, pos.x, pos.y);
+    brick_draw(brick.shape, brick.rotation, &screen, brick.x, brick.y);
 
     dem_copy_raw(screen.data);
 }
 
 void game_timer_callback(void) {
-    
+    s_tick++;
 }
 
 void game_loop(void) {
     bool draw = false;
+    static uint32_t tick = 0xFFFFFFFF;
+
     if( button_pressed(BUTTON_UP) ) {
-        s_rotation = (s_rotation + 1) % 4;
-        printf("rotation %d\n", s_rotation);
+        brick.rotation = (brick.rotation + 1) % 4;
+        printf("rotation %d\n", brick.rotation);
         draw = true;
     }
+
     if( button_pressed(BUTTON_ACTION0) ) {
-        s_shape = (s_shape + 1) % 7;
-        printf("shape %d\n", s_shape);
+        brick.shape = (brick.shape + 1) % 7;
+        printf("shape %d\n", brick.shape);
         draw = true;
     }
 
@@ -93,9 +110,18 @@ void game_loop(void) {
         draw = true;
     }
 
+    if( (tick != s_tick) && (s_tick % 100 == 0) ) {
+	tick = s_tick;
+        brick.y++;
+        if( collision(brick.x, brick.y) ) {
+            // kaputt
+        }
+        draw = true;
+    }
+
     if( draw ) {
         canvas_blit(&background, &screen, 0, 0);
-        brick_draw(s_shape, s_rotation, &screen, pos.x, pos.y);
+        brick_draw(brick.shape, brick.rotation, &screen, brick.x, brick.y);
         dem_copy_raw(screen.data);
         draw = false;
     }

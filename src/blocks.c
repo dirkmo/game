@@ -176,12 +176,16 @@ const uint8_t shapes[] = {
     0b0000,
 };
 
-void brick_draw(uint8_t shape, uint8_t rotation, canvas_t *cv, uint8_t fx, uint8_t fy) {
+bool brick_getblock(uint8_t shape, uint8_t rotation, uint8_t x, uint8_t y ) {
     const uint8_t *pshape = &shapes[shape*16 + 4*(rotation%4)];
+    return (pshape[y] >> (3-x)) & 1;
+}
+
+void brick_draw(uint8_t shape, uint8_t rotation, canvas_t *cv, uint8_t fx, uint8_t fy) {
     int x, y;
     for( y = 0; y < 4; y++ ) {
         for( x = 0; x < 4; x++ ) {
-            if( (pshape[y] >> (3-x)) & 1 ) {
+            if( brick_getblock(shape, rotation, x, y) ) {
                 canvas_blit(&block_filled, cv, (fx + x) * block_filled.w, (fy + y) * block_filled.h);
             } else {
                 canvas_blit(&nothing, cv, (fx + x) * block_filled.w, (fy + y) * block_filled.h);
