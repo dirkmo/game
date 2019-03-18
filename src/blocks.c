@@ -177,6 +177,7 @@ const uint8_t shapes[] = {
 };
 
 bool brick_getblock(uint8_t shape, uint8_t rotation, uint8_t x, uint8_t y ) {
+    assert(x < 4 && y < 4);
     const uint8_t *pshape = &shapes[shape*16 + 4*(rotation%4)];
     return (pshape[y] >> (3-x)) & 1;
 }
@@ -185,11 +186,8 @@ void brick_draw(uint8_t shape, uint8_t rotation, canvas_t *cv, uint8_t fx, uint8
     int x, y;
     for( y = 0; y < 4; y++ ) {
         for( x = 0; x < 4; x++ ) {
-            if( brick_getblock(shape, rotation, x, y) ) {
-                canvas_blit(&block_solid, cv, (fx + x) * block_solid.w, (fy + y) * block_solid.h);
-            } else {
-                canvas_blit(&nothing, cv, (fx + x) * block_solid.w, (fy + y) * block_solid.h);
-            }
+            const canvas_t *block_cv = brick_getblock(shape, rotation, x, y) ? &block_solid : &nothing;
+            canvas_blit(block_cv, cv, (fx + x) * block_solid.w, (fy + y) * block_solid.h);
         }
     }
 }

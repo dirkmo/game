@@ -89,18 +89,18 @@ void game_init(void) {
 }
 
 void game_timer_callback(void) {
-    s_tick++;
+    //s_tick++;
 }
 
 void game_loop(void) {
     bool draw = false;
     static uint32_t tick = 0xFFFFFFFF;
 
-    if( button_pressed(BUTTON_UP) ) {
-        brick.rotation = (brick.rotation + 1) % 4;
-        printf("rotation %d\n", brick.rotation);
-        draw = true;
-    }
+    //if( button_pressed(BUTTON_UP) ) {
+        //brick.rotation = (brick.rotation + 1) % 4;
+        //printf("rotation %d\n", brick.rotation);
+        //draw = true;
+    //}
 
     if( button_pressed(BUTTON_ACTION0) ) {
         brick.shape = (brick.shape + 1) % 7;
@@ -124,6 +124,16 @@ void game_loop(void) {
         if( collision(brick.x, brick.y) ) {
             // kaputt
         }
+        draw = true;
+    }
+
+    if( button_pressed(BUTTON_DOWN) ) {
+        brick.y++;
+        draw = true;
+    }
+
+    if( button_pressed(BUTTON_UP) ) {
+        brick.y--;
         draw = true;
     }
 
