@@ -20,81 +20,168 @@ const canvas_t nothing = {
 };
 
 const uint8_t shapes[] = {
-    0, 0, 0, 0,
-    1, 1, 1, 0,
-    0, 1, 0, 0,
-    0, 0, 0, 0,
+    // xxx
+    //  x
+    0b0000,
+    0b1110,
+    0b0100,
+    0b0000,
 
-    0, 1, 0, 0,
-    0, 1, 0, 0,
-    0, 1, 0, 0,
-    0, 1, 0, 0,
-
-    0, 0, 0, 0,
-    0, 1, 1, 0,
-    0, 1, 1, 0,
-    0, 0, 0, 0,
-
-    0, 1, 0, 0,
-    0, 1, 1, 0,
-    0, 0, 1, 0,
-    0, 0, 0, 0,
+    0b0100,
+    0b1100,
+    0b0100,
+    0b0000,
     
-    0, 0, 1, 0,
-    0, 1, 1, 0,
-    0, 1, 0, 0,
-    0, 0, 0, 0,
+    0b0100,
+    0b1110,
+    0b0000,
+    0b0000,
 
-    0, 0, 0, 0,
-    1, 1, 1, 0,
-    1, 0, 0, 0,
-    0, 0, 0, 0,
+    0b0100,
+    0b0110,
+    0b0100,
+    0b0000,
 
-    0, 0, 0, 0,
-    1, 1, 1, 0,
-    0, 0, 1, 0,
-    0, 0, 0, 0,
+    // xxxxx
+    0b0100,
+    0b0100,
+    0b0100,
+    0b0100,
+
+    0b0000,
+    0b1111,
+    0b0000,
+    0b0000,
+
+    0b0100,
+    0b0100,
+    0b0100,
+    0b0100,
+
+    0b0000,
+    0b1111,
+    0b0000,
+    0b0000,
+
+    // xx
+    // xx
+    0b0000,
+    0b0110,
+    0b0110,
+    0b0000,
+
+    0b0000,
+    0b0110,
+    0b0110,
+    0b0000,
+
+    0b0000,
+    0b0110,
+    0b0110,
+    0b0000,
+
+    0b0000,
+    0b0110,
+    0b0110,
+    0b0000,
+
+    // x
+    // xx
+    //  x
+    0b0100,
+    0b0110,
+    0b0010,
+    0b0000,
+
+    0b0000,
+    0b0011,
+    0b0110,
+    0b0000,
+
+    0b0100,
+    0b0110,
+    0b0010,
+    0b0000,
+
+    0b0000,
+    0b0011,
+    0b0110,
+    0b0000,
+    
+    //  x
+    // xx
+    // x
+    0b0010,
+    0b0110,
+    0b0100,
+    0b0000,
+
+    0b0000,
+    0b0110,
+    0b0011,
+    0b0000,
+
+    0b0010,
+    0b0110,
+    0b0100,
+    0b0000,
+
+    0b0000,
+    0b0110,
+    0b0011,
+    0b0000,
+
+    // xxx
+    // x
+    0b0000,
+    0b1110,
+    0b1000,
+    0b0000,
+
+    0b1100,
+    0b0100,
+    0b0100,
+    0b0000,
+
+    0b0010,
+    0b1110,
+    0b0000,
+    0b0000,
+
+    0b0100,
+    0b0100,
+    0b0110,
+    0b0000,
+
+    // x
+    // xxx
+    0b1000,
+    0b1110,
+    0b0000,
+    0b0000,
+
+    0b0110,
+    0b0100,
+    0b0100,
+    0b0000,
+
+    0b0000,
+    0b1110,
+    0b0010,
+    0b0000,
+
+    0b0100,
+    0b0100,
+    0b1100,
+    0b0000,
 };
 
-static void rotate(const uint8_t *shape, uint8_t rot, uint8_t *shape_rot) {
-    rot %= 4;
-    int x, y;
-    if( rot == 0 ) {
-	for( y = 0; y < 4; y++ ) {
-    	    for( x = 0; x < 4; x++ ) {
-        	*shape_rot++ = shape[x + y*4];
-    	    }
-	}
-    } else if( rot == 1 ) {
-	for( y = 0; y < 4; y++ ) {
-    	    for( x = 0; x < 4; x++ ) {
-        	*shape_rot++ = shape[y + (3-x)*4];
-    	    }
-	}
-    } else if ( rot == 2 ) {
-	for( y = 0; y < 4; y++ ) {
-    	    for( x = 0; x < 4; x++ ) {
-        	*shape_rot++ = shape[3-x + (3-y)*4];
-    	    }
-	}
-    } else if ( rot == 3 ) {
-	for( y = 0; y < 4; y++ ) {
-    	    for( x = 0; x < 4; x++ ) {
-        	*shape_rot++ = shape[3-y + x*4];
-    	    }
-	}
-    }
-}
-
 void brick_draw(uint8_t shape, uint8_t rotation, canvas_t *cv, uint8_t fx, uint8_t fy) {
-    assert(shape < sizeof(shapes) / 16);
-    const uint8_t *pshape = &shapes[shape*16];
-    uint8_t shape_rotated[16];
-    rotate(pshape, rotation, shape_rotated);
+    const uint8_t *pshape = &shapes[shape*16 + 4*(rotation%4)];
     int x, y;
     for( y = 0; y < 4; y++ ) {
         for( x = 0; x < 4; x++ ) {
-            if( shape_rotated[x+y*4]) {
+            if( (pshape[y] >> (3-x)) & 1 ) {
                 canvas_blit(&block_filled, cv, (fx + x) * block_filled.w, (fy + y) * block_filled.h);
             } else {
                 canvas_blit(&nothing, cv, (fx + x) * block_filled.w, (fy + y) * block_filled.h);

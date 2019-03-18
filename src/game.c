@@ -25,8 +25,26 @@ static canvas_t background = {
     .data = bgbuf
 };
 
+static struct {
+    int x;
+    int y;
+} pos = { .x = 5, .y = 2 };
+
 static uint8_t s_rotation;
 static uint8_t s_shape;
+
+bool collision( int x, int y ) {
+    return false;
+}
+
+void move(int _x, int _y) {
+    int x = pos.x + _x;
+    int y = pos.y + _y;
+    if( !collision(x, y) ) {
+        pos.x = x;
+        pos.y = y;
+    }
+}
 
 void game_init(void) {
     printf("Game machine started.\n");
@@ -43,7 +61,7 @@ void game_init(void) {
     //     canvas_vline(&screen, 41+4 + 12*3 + 4-i, 0, 63, true );
     // }
 
-    brick_draw(s_shape, s_rotation, &screen, 0, 0);
+    brick_draw(s_shape, s_rotation, &screen, pos.x, pos.y);
 
     dem_copy_raw(screen.data);
 }
@@ -54,18 +72,32 @@ void game_timer_callback(void) {
 
 void game_loop(void) {
     bool draw = false;
-    if( button_pressed(BUTTON_ACTION0) ) {
+    if( button_pressed(BUTTON_UP) ) {
         s_rotation = (s_rotation + 1) % 4;
+        printf("rotation %d\n", s_rotation);
         draw = true;
     }
-    if( button_pressed(BUTTON_ACTION1) ) {
+    if( button_pressed(BUTTON_ACTION0) ) {
         s_shape = (s_shape + 1) % 7;
+        printf("shape %d\n", s_shape);
         draw = true;
     }
+
+    if( button_pressed(BUTTON_LEFT) ) {
+        move(-1, 0);
+        draw = true;
+    }
+
+    if( button_pressed(BUTTON_RIGHT) ) {
+        move(1, 0);
+        draw = true;
+    }
+
     if( draw ) {
         canvas_blit(&background, &screen, 0, 0);
-        brick_draw(s_shape, s_rotation, &screen, 0, 0);
+        brick_draw(s_shape, s_rotation, &screen, pos.x, pos.y);
         dem_copy_raw(screen.data);
+        draw = false;
     }
 }
 
