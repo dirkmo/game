@@ -13,9 +13,9 @@
 #define FIELD_W 12
 #define FIELD_H (64 / 3)
 // left border
-#define FIELD_L (128/3 - FIELD_W/2)
+#define FIELD_L (128/6 - FIELD_W/2)
 // right border
-#define FIELD_R (128/3 + FIELD_W/2)
+#define FIELD_R (128/6 + FIELD_W/2)
 
 static uint32_t s_tick;
 
@@ -44,7 +44,13 @@ static struct brick_t {
 } brick;
 
 void background_from_field(void) {
-    
+    memset(field, 2, sizeof(field));
+    int x, y;
+    for( y = 0; y < FIELD_H; y++ ) {
+        for( x = 0; x < FIELD_W; x++ ) {
+            block_draw(field[x+y*FIELD_W], &background, FIELD_L+x, y);
+	}
+    }
 }
 
 bool collision( int x, int y ) {
@@ -75,6 +81,8 @@ void game_init(void) {
     //     canvas_vline(&screen, 41+4 + 12*3 + 4-i, 0, 63, true );
     // }
 
+    brick.x = 0;
+    brick.y = 0;
     brick_draw(brick.shape, brick.rotation, &screen, brick.x, brick.y);
 
     dem_copy_raw(screen.data);
@@ -120,8 +128,11 @@ void game_loop(void) {
     }
 
     if( draw ) {
+        background_from_field();
         canvas_blit(&background, &screen, 0, 0);
-        brick_draw(brick.shape, brick.rotation, &screen, brick.x, brick.y);
+        int x = brick.x + FIELD_L;
+        int y = brick.y;
+        brick_draw(brick.shape, brick.rotation, &screen, x, y);
         dem_copy_raw(screen.data);
         draw = false;
     }

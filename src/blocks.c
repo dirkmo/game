@@ -4,15 +4,15 @@
 #include "canvas.h"
 
 const uint8_t block_hollow_pix[] = { 7, 5, 7 };
-const uint8_t block_filled_pix[] = { 7, 7, 7 };
+const uint8_t block_solid_pix[] = { 7, 7, 7 };
 const uint8_t empty[] = { 0, 0, 0 };
 
-const canvas_t block_empty = {
+const canvas_t block_hollow = {
     .w = 3, .h = 3, .data = (uint8_t*) block_hollow_pix
 };
 
-const canvas_t block_filled = {
-    .w = 3, .h = 3, .data = (uint8_t*) block_filled_pix
+const canvas_t block_solid = {
+    .w = 3, .h = 3, .data = (uint8_t*) block_solid_pix
 };
 
 const canvas_t nothing = {
@@ -186,10 +186,16 @@ void brick_draw(uint8_t shape, uint8_t rotation, canvas_t *cv, uint8_t fx, uint8
     for( y = 0; y < 4; y++ ) {
         for( x = 0; x < 4; x++ ) {
             if( brick_getblock(shape, rotation, x, y) ) {
-                canvas_blit(&block_filled, cv, (fx + x) * block_filled.w, (fy + y) * block_filled.h);
+                canvas_blit(&block_solid, cv, (fx + x) * block_solid.w, (fy + y) * block_solid.h);
             } else {
-                canvas_blit(&nothing, cv, (fx + x) * block_filled.w, (fy + y) * block_filled.h);
+                canvas_blit(&nothing, cv, (fx + x) * block_solid.w, (fy + y) * block_solid.h);
             }
         }
     }
 }
+
+void block_draw(uint8_t type, canvas_t *cv, uint8_t x, uint8_t y) {
+    const canvas_t *blocktypes[] = { &nothing, &block_hollow, &block_solid };
+    canvas_blit( blocktypes[type], cv, x*blocktypes[type]->w, y*blocktypes[type]->h );
+}
+
