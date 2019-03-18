@@ -26,6 +26,7 @@ static canvas_t background = {
 };
 
 static uint8_t s_rotation;
+static uint8_t s_shape;
 
 void game_init(void) {
     printf("Game machine started.\n");
@@ -42,7 +43,7 @@ void game_init(void) {
     //     canvas_vline(&screen, 41+4 + 12*3 + 4-i, 0, 63, true );
     // }
 
-    brick_draw(0, 0, &screen, 0, 0);
+    brick_draw(s_shape, s_rotation, &screen, 0, 0);
 
     dem_copy_raw(screen.data);
 }
@@ -52,8 +53,19 @@ void game_timer_callback(void) {
 }
 
 void game_loop(void) {
+    bool draw = false;
     if( button_pressed(BUTTON_ACTION0) ) {
         s_rotation = (s_rotation + 1) % 4;
+        draw = true;
+    }
+    if( button_pressed(BUTTON_ACTION1) ) {
+        s_shape = (s_shape + 1) % 7;
+        draw = true;
+    }
+    if( draw ) {
+        canvas_blit(&background, &screen, 0, 0);
+        brick_draw(s_shape, s_rotation, &screen, 0, 0);
+        dem_copy_raw(screen.data);
     }
 }
 

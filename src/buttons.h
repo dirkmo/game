@@ -17,9 +17,9 @@ typedef enum {
 
 void button_callback(uint32_t _buttons);
 
-bool button_pressed(buttons_t button);
-bool button_released(buttons_t button);
-bool button_is_down(buttons_t button);
-bool button_is_up(buttons_t button);
+bool button_pressed(uint32_t button_mask);
+bool button_released(uint32_t button_mask);
+bool button_is_down(uint32_t button_mask);
+bool button_is_up(uint32_t button_mask);
 
 #endif

@@ -58,7 +58,32 @@ const uint8_t shapes[] = {
 
 static void rotate(const uint8_t *shape, uint8_t rot, uint8_t *shape_rot) {
     rot %= 4;
-    memcpy(shape_rot, shape, 16);
+    int x, y;
+    if( rot == 0 ) {
+	for( y = 0; y < 4; y++ ) {
+    	    for( x = 0; x < 4; x++ ) {
+        	*shape_rot++ = shape[x + y*4];
+    	    }
+	}
+    } else if( rot == 1 ) {
+	for( y = 0; y < 4; y++ ) {
+    	    for( x = 0; x < 4; x++ ) {
+        	*shape_rot++ = shape[y + (3-x)*4];
+    	    }
+	}
+    } else if ( rot == 2 ) {
+	for( y = 0; y < 4; y++ ) {
+    	    for( x = 0; x < 4; x++ ) {
+        	*shape_rot++ = shape[3-x + (3-y)*4];
+    	    }
+	}
+    } else if ( rot == 3 ) {
+	for( y = 0; y < 4; y++ ) {
+    	    for( x = 0; x < 4; x++ ) {
+        	*shape_rot++ = shape[3-y + x*4];
+    	    }
+	}
+    }
 }
 
 void brick_draw(uint8_t shape, uint8_t rotation, canvas_t *cv, uint8_t fx, uint8_t fy) {

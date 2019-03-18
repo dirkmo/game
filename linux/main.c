@@ -48,7 +48,7 @@ void handle_keyboard(SDL_Event *event) {
     } else {
         buttons &= ~mask;
     }
-    buttons_callback(buttons);
+    button_callback(buttons);
 }
 
 int main(int argc, char *argv[]) {
